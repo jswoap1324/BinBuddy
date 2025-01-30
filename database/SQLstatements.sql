@@ -32,16 +32,42 @@ INSERT INTO material (materialName, disposalMethod)
 VALUES('Yard Waste', 'Compost');
 
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
-VALUES ('Plastic Container', 3, 'Recycle');
+VALUES ('Plastic container', 3, 'Recycle');
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
-VALUES ('Plastic Styrofoam', 3, 'Garbage');
+VALUES ('Plastic styrofoam', 3, 'Garbage');
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
-VALUES ('Plastic Produce Sticker', 3, 'Garbage');
+VALUES ('Plastic produce sticker', 3, 'Garbage');
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
-VALUES ('Metal can', 5, 'Recycle');
+VALUES ('Plastic straw', 3, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic shopping bag', 3, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic chip bag', 3, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic bottle', 3, 'Recycle');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic lid', 3, 'Recycle');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic mailer', 3, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic bubble wrap', 3, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic pesticide container', 3, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic laundry detergent jug', 3, 'Recycle');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Plastic shampoo/lotion bottle', 3, 'Recycle');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Metal food can', 5, 'Recycle');
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
 VALUES ('Metal paint can', 5, 'Garbage');
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
 VALUES ('Metal hangers', 5, 'Garbage');
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
 VALUES ('Metal aerosal spray can', 5, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Metal cable', 5, 'Garbage');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Metal battery', 5, 'Drop off');
+INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
+VALUES ('Metal beverage can', 5, 'Recycle');
