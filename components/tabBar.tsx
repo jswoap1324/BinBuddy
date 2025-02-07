@@ -1,16 +1,12 @@
-import { View, Platform, StyleSheet, LayoutChangeEvent } from 'react-native';
+import { View, StyleSheet, LayoutChangeEvent } from 'react-native';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
-import { Text, PlatformPressable } from '@react-navigation/elements';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Feather } from '@expo/vector-icons';
 import TabBarButton from './tabBarButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { transform } from '@babel/core';
+
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
-  const { colors } = useTheme();
-  const { buildHref } = useLinkBuilder();
   const [dimensions, setDimensions] = useState({height:20, width: 100});
   const buttonWidth = dimensions.width / state.routes.length;
   const onTabbarLayout = (e: LayoutChangeEvent) => {
@@ -25,6 +21,12 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
       transform: [{translateX: tabPositionX.value}]
     }
   });
+
+  useEffect(() => {
+    // Get the current active index
+    const activeIndex = state.index;
+    tabPositionX.value = withSpring(buttonWidth * activeIndex, { duration: 1500 });
+  }, [state.index]);
   return (
     <View onLayout={onTabbarLayout} style={styles.tabbar}>
       <Animated.View style= {[animatedStyle,{
@@ -76,23 +78,6 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             color = {isFocused ? '#fff' : 'black'}
             label = {label}
             />
-        //   <PlatformPressable
-        //     key = {route.name}
-        //     href={buildHref(route.name, route.params)}
-        //     accessibilityState={isFocused ? { selected: true } : {}}
-        //     accessibilityLabel={options.tabBarAccessibilityLabel}
-        //     testID={options.tabBarButtonTestID}
-        //     onPress={onPress}
-        //     onLongPress={onLongPress}
-        //     style={styles.tabbarItem}
-        //   >
-        //     {icon[route.name]({
-        //         color: isFocused ? '#53783e' : 'black'
-        //     })}
-        //     <Text style={{ color: isFocused ? '#53783e' : 'black' }}>
-        //       {label}
-        //     </Text>
-        //   </PlatformPressable>
         );
       })}
     </View>

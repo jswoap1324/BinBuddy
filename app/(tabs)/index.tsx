@@ -1,8 +1,10 @@
 import { Link } from "expo-router";
 import { Text, TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 
 export default function Index() {
+    const navigation = useNavigation();
   return (
     <View style={styles.container}>
     {/* Logo in the Top Left */}
@@ -21,11 +23,11 @@ export default function Index() {
          placeholder="Search for items"
         placeholderTextColor="gray"
       />
-       <Link href="/scan" asChild>
-       <TouchableOpacity style={styles.scanButton}>
+       {/* <Link href="/scan" asChild> */}
+       <TouchableOpacity style={styles.scanButton} onPress={() => navigation.navigate('scan')}>
         <Ionicons name="scan" size={24} color="#53783e"/>
        </TouchableOpacity>
-       </Link>
+       {/* </Link> */}
     </View>
   </View>
   );
