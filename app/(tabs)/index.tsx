@@ -1,74 +1,99 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Link } from "expo-router";
+import { Text, TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
-export default function HomeScreen() {
+export default function Index() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+    {/* Logo in the Top Left */}
+    {/* <Image
+      source={require('../assets/images/32B397.png')} // Replace with your logo URL
+      style={styles.logo}
+    /> */}
+    {/* Welcome Text */}
+    <Text style={[styles.title, {fontFamily: 'BebasNeue'}]}>Welcome to BinBuddy!</Text>
+    <Text style={[styles.subtitle, {fontFamily: 'OpenSans'}]}>
+      Manage your waste better, one scan at a time.
+    </Text>
+    <View style={styles.searchContainer}>
+      <TextInput
+         style={styles.searchBar}
+         placeholder="Search for items"
+        placeholderTextColor="gray"
+      />
+       <Link href="/scan" asChild>
+       <TouchableOpacity style={styles.scanButton}>
+        <Ionicons name="scan" size={24} color="#53783e"/>
+       </TouchableOpacity>
+       </Link>
+    </View>
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+      backgroundColor: '#e9f0e0',
+    },
+    logo: {
+      position: "absolute",
+      top: 40, // Distance from the top
+      left: 20, // Distance from the left
+      width: 75, // Logo width
+      height: 75, // Logo height
+      borderRadius: 50, // Rounded logo
+        backgroundColor: "transparent",
+    },
+    searchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+        marginBottom: 20
+    },
+     searchBar: {
+      flex: 1,
+      backgroundColor: '#fbfaf6',
+      padding: 10,
+        borderRadius: 10,
+      marginRight: 10,
+       color: 'black'
+     },
+      scanButton: {
+        backgroundColor: '#fbfaf6',
+      padding: 10,
+        borderRadius: 10,
+    },
+    title: {
+      fontSize: 38,
+      fontWeight: "bold",
+      color: "#53783e",
+      textAlign: "center",
+      marginBottom: 10,
+    },
+    subtitle: {
+      fontSize: 20,
+      color: "black",
+      textAlign: "center",
+      marginBottom: 30,
+      lineHeight: 24,
+    },
+      button: {
+      backgroundColor: '#fbfaf6',
+      paddingVertical: 15,
+          paddingHorizontal: 120,
+      borderRadius: 10,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 5 },
+      shadowOpacity: 0.3,
+      shadowRadius: 10,
+      elevation: 5,
+    },
+    buttonText: {
+      fontSize: 20,
+      color: '#53783e',
+      fontWeight: "bold",
+    },
+  });
