@@ -1,9 +1,12 @@
 import { Text, View, StyleSheet } from "react-native";
+import {Html5QrcodeScanner} from "html5-qrcode";
+import QRCodeScanner from '../../components/QRCodeScanner';
 
 export default function ScanScreen() {
   return (
     <View style={styles.container}>
-      <Text style = {styles.text}>This is Scan screen.</Text>
+      <Text style = {styles.text}>Scan your item!</Text>
+      <QRCodeScanner />
     </View>
   );
 }

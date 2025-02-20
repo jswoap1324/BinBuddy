@@ -80,22 +80,19 @@ export default function App() {
   return (
     <ScrollView>
     <SafeAreaView style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <Button onPress={onPress1} title="App" />
-        <Parent open={open1} text="BinBuddy is an local King County application dedicated to serving your recycling needs! " />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button onPress={onPress2} title="Scan" />
+    <Button onPress={onPress1} title="About App" />
+        <Parent open={open1} text="BinBuddy is an local King County application dedicated to serving your recycling needs!" />
+    
+      <Button onPress={onPress2} title="How to Scan" />
+      
+        
         <Parent open={open2} text="Identifiable by the barcode icon or navigated through the home page, you can use our in app camera to scan barcodes. By scanning a barcode on any item, BinBuddy will do its best to determine whether the scanned item is recyclable or not."  />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button onPress={onPress3} title="Developers" />
-        <Parent open={open3} text="Our team: Team Lead: Jessica SwoapAPI Team:Database Team:App Development Team:" />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button onPress={onPress4} title="Another Box" />
-        <Parent open={open4} text="Our team: Team Lead: Jessica SwoapAPI Team:Database Team:App Development Team:" />
-      </View>
+      
+
+      
+      <Button onPress={onPress3} title="Developers" />
+        <Parent open={open3} text="Our team: Team Lead: API Team:Database Team: App Development Team:" />
+     
     </SafeAreaView>
     </ScrollView>
   );
@@ -105,41 +102,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingTop: 24,
-  },
-  buttonContainer: {
-    flex: 1,
-    paddingBottom: '1rem',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingTop: 50,
+    margin:0,
   },
   content: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  parent: {
-    width: 300,
   },
   wrapper: {
     width: '100%',
     position: 'absolute',
     display: 'flex',
     alignItems: 'center',
+    
   },
   animatedView: {
     width: '100%',
     overflow: 'hidden',
   },
+  button:{
+    backgroundColor:'#ceede6',
+    
+  },
   box: {
     height: 200,
-    width: 220,
+    width: 300,
+    padding:5,
     backgroundColor: '#53783e',
     borderRadius: 20,
-    alignItems: 'left',
-    justifyContent: 'left',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign:'center',
   },
   text: {
     color: '#fff', // White text
