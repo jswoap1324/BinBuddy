@@ -1,3 +1,59 @@
+PRAGMA foreign_keys = ON;
+
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS Material;
+DROP TABLE IF EXISTS SpecificItem;
+
+-- Create Tables
+CREATE TABLE MATERIAL (
+	materialID INT AUTO_INCREMENT PRIMARY KEY,
+	materialName varchar(60),
+	disposalMethod varchar(60)
+);
+
+CREATE TABLE SPECIFIC_ITEM (
+	itemID INT AUTO_INCREMENT PRIMARY KEY,
+	itemName varchar(60),
+	materialID INT, 			-- foreign key
+	disposalMethod varchar(60),
+	FOREIGN KEY (materialID) REFERENCES Material(materialID) ON UPDATE CASCADE
+);
+
+-- Insert Data
+INSERT INTO MATERIAL VALUES
+('Cardboard', 'Recycle'),
+('Paper', 'Recycle'),
+('Plastic', 'Conditional'),
+('Glass', 'Recycle'),
+('Metal', 'Conditional'),
+('Food', 'Compost'),
+('Yard Waste', 'Compost');
+
+INSERT INTO SPECIFIC_ITEM VALUES
+('Plastic container', 3, 'Recycle'),
+('Plastic styrofoam', 3, 'Garbage'),
+('Plastic produce sticker', 3, 'Garbage'),
+('Plastic straw', 3, 'Garbage'),
+('Plastic shopping bag', 3, 'Garbage'),
+('Plastic chip bag', 3, 'Garbage'),
+('Plastic bottle', 3, 'Recycle'),
+('Plastic lid', 3, 'Recycle'),
+('Plastic mailer', 3, 'Garbage'),
+('Plastic bubble wrap', 3, 'Garbage'),
+('Plastic pesticide container', 3, 'Garbage'),
+('Plastic laundry detergent jug', 3, 'Recycle'),
+('Plastic shampoo/lotion bottle', 3, 'Recycle'),
+('Metal food can', 5, 'Recycle'),
+('Metal paint can', 5, 'Garbage'),
+('Metal hangers', 5, 'Garbage'),
+('Metal aerosal spray can', 5, 'Garbage'),
+('Metal cable', 5, 'Garbage'),
+('Metal battery', 5, 'Drop off'),
+('Metal beverage can', 5, 'Recycle');
+
+
+-- MySQL Code
+/*
 CREATE DATABASE BinBuddy;
 USE BinBuddy;
 
@@ -14,7 +70,6 @@ CREATE TABLE SpecificItem (
     disposalMethod varchar(60),
     FOREIGN KEY (materialID) REFERENCES Material(materialID)
 );
-
 
 INSERT INTO material (materialName, disposalMethod)
 VALUES ('Cardboard', 'Recycle');
@@ -71,3 +126,4 @@ INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
 VALUES ('Metal battery', 5, 'Drop off');
 INSERT INTO SpecificItem (itemName, materialID, disposalMethod)
 VALUES ('Metal beverage can', 5, 'Recycle');
+*/
