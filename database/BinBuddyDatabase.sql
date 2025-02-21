@@ -1,10 +1,35 @@
 PRAGMA foreign_keys = ON;
 
 -- Drop existing tables if they exist
+DROP TABLE IF EXISTS MATERIAL;
+DROP TABLE IF EXISTS ITEM;
+
+CREATE DATABASE BinBuddy;
+USE BinBuddy;
+
+-- Create Tables
+CREATE TABLE MATERIAL (
+	materialID INT AUTO_INCREMENT PRIMARY KEY,
+	name varchar(60),
+	disposalMethod varchar(60)
+);
+
+CREATE TABLE ITEM (
+	itemID PRIMARY KEY,  -- This is the barcode value
+	name varchar(60),
+	materialID INT,  -- Foreign key
+	FOREIGN KEY (materialID) REFERENCES Material(materialID) ON UPDATE CASCADE
+);
+
+/*
+-- Drop existing tables if they exist
 DROP TABLE IF EXISTS Material;
 DROP TABLE IF EXISTS SpecificItem;
 
 -- Create Tables
+CREATE TABLE BAR
+
+
 CREATE TABLE MATERIAL (
 	materialID INT AUTO_INCREMENT PRIMARY KEY,
 	materialName varchar(60),
@@ -50,7 +75,7 @@ INSERT INTO SPECIFIC_ITEM VALUES
 ('Metal cable', 5, 'Garbage'),
 ('Metal battery', 5, 'Drop off'),
 ('Metal beverage can', 5, 'Recycle');
-
+*/
 
 -- MySQL Code
 /*
