@@ -1,25 +1,38 @@
+/*
+Notes
+UPC- barcode api
+items table with serial number, name, diposal method
+
+GENERAL RECYCLING GUIDELINES:
+- Clean and dry
+- Replace caps onto bottle (do not recycle caps separately)
+*/
+
 PRAGMA foreign_keys = ON;
 
 -- Drop existing tables if they exist
-DROP TABLE IF EXISTS MATERIAL;
 DROP TABLE IF EXISTS ITEM;
 
 CREATE DATABASE BinBuddy;
 USE BinBuddy;
 
 -- Create Tables
-CREATE TABLE MATERIAL (
-	materialID INT AUTO_INCREMENT PRIMARY KEY,
-	name varchar(60),
+CREATE TABLE ITEM (
+	itemID INT PRIMARY KEY,  -- This is the serial number
+	name varchar(100),
 	disposalMethod varchar(60)
 );
 
-CREATE TABLE ITEM (
-	itemID PRIMARY KEY,  -- This is the barcode value
-	name varchar(60),
-	materialID INT,  -- Foreign key
-	FOREIGN KEY (materialID) REFERENCES Material(materialID) ON UPDATE CASCADE
-);
+-- Insert Data
+INSERT INTO ITEM VALUES
+(816645024352, "The Honest Company Hand Sanitizer Spray - Coastal Surf - Trial Size - 2 fl oz", "Trash cap and sprayer, recycle bottle"),
+(812154035216, "Native Plastic Free Deodorant - Eucalyptus & Mint - Aluminum Free - 2.65 oz", "Compost"),
+(041507070080, "Thayers Natural Remedies Witch Hazel Alcohol Free Unscented Toner - 12 fl oz", "Recycle"),
+(850007187279, "TGIN Rose Water Smoothing Leave-In Conditioner - 13 fl oz", "Trash pump, recycle bottle"),
+(603084494514, "Garnier Micellar Water Waterproof Makeup Remover and Facial Cleanser", "Recycle"),
+(037000808053, "Secret Outlast Invisible Solid Antiperspirant Deodorant for Women - Completely Clean Scent - 2.6oz"
+
+
 
 /*
 -- Drop existing tables if they exist
