@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+// import { Link } from "expo-router";
 import { Text, TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
       button: {
       backgroundColor: '#fbfaf6',
       paddingVertical: 15,
-          paddingHorizontal: 120,
+      paddingHorizontal: 120,
       borderRadius: 10,
       shadowColor: "#000",
       shadowOffset: { width: 0, height: 5 },
