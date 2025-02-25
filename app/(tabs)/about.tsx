@@ -140,4 +140,6 @@ const styles = StyleSheet.create({
     textAlign: 'center', // Center the text
     fontSize: 16, // Adjust the size if needed
   },
-});
+  });
+
+
