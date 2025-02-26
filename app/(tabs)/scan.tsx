@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
     },
+    
     topOverlay: {
       position: "absolute",
       top: 0,
