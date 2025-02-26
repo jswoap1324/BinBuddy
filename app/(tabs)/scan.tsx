@@ -30,6 +30,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {!scanned && (<>
+    
       <CameraView
         onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
         barcodeScannerSettings={{
@@ -50,20 +52,20 @@ export default function App() {
         <View style={styles.bottomOverlay} />
         <Text style={styles.instructionText}>
     Point your mobile phone towards the barcode to scan
-  </Text>
+    </Text>
       </View>
-      {scannedData && (
-        <View style={styles.scannedDataContainer}>
-          <Text style={styles.scannedDataText}>
-            Barcode Type: {scannedData.type}
-          </Text>
-          <Text style={styles.scannedDataText}>
-            Barcode Data: {scannedData.data}
-          </Text>
-        </View>
+     </>
       )}
       {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setScannedData(null);}} color={"#53783e"} />
+      <View style={styles.scannedDataContainer}>
+      <Text style={styles.scannedDataText}>
+        Barcode Type: {scannedData.type}
+      </Text>
+      <Text style={styles.scannedDataText}>
+        Barcode Data: {scannedData.data}
+      </Text>
+      <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setScannedData(null);}} color={"#53783e"} />
+    </View>
       )}
     </View>
   );
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
     },
-    
+
     topOverlay: {
       position: "absolute",
       top: 0,
@@ -136,17 +138,17 @@ const styles = StyleSheet.create({
     },
     scannedDataContainer: {
       position: "absolute",
-      top: "30%",
+      top: "40%",
       left: 0,
       right: 0,
       alignItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      // backgroundColor: "rgba(0, 0, 0, 0.5)",
       padding: 20,
       borderRadius: 10,
     },
     scannedDataText: {
-      color: "#fff",
-      fontSize: 16,
+      color: "#53783e",
+      fontSize: 25,
       marginBottom: 10,
     },
     instructionText: {
