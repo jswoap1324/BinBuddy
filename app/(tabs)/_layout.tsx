@@ -6,9 +6,6 @@ export default function TabsLayout() {
   return(
     <Tabs
         tabBar={props => <TabBar{...props}/>}
-        // screenOptions={{
-        //     tabBarActiveTintColor: "#53783e",
-        // }}
     >
       <Tabs.Screen 
         name = "index"

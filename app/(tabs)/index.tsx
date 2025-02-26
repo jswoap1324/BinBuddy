@@ -1,4 +1,3 @@
-// import { Link } from "expo-router";
 import { Text, TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
@@ -7,12 +6,6 @@ export default function Index() {
     const navigation = useNavigation();
   return (
     <View style={styles.container}>
-    {/* Logo in the Top Left */}
-    {/* <Image
-      source={require('../assets/images/32B397.png')} // Replace with your logo URL
-      style={styles.logo}
-    /> */}
-    {/* Welcome Text */}
     <Text style={[styles.title, {fontFamily: 'BebasNeue'}]}>Welcome to BinBuddy!</Text>
     <Text style={[styles.subtitle, {fontFamily: 'OpenSans'}]}>
       Manage your waste better, one scan at a time.
@@ -23,11 +16,9 @@ export default function Index() {
          placeholder="Search for items"
         placeholderTextColor="gray"
       />
-       {/* <Link href="/scan" asChild> */}
        <TouchableOpacity style={styles.scanButton} onPress={() => navigation.navigate('scan')}>
         <Ionicons name="scan" size={24} color="#53783e"/>
        </TouchableOpacity>
-       {/* </Link> */}
     </View>
   </View>
   );
