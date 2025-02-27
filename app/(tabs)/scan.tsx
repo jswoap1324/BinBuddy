@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
     },
-
     topOverlay: {
       position: "absolute",
       top: 0,
@@ -186,7 +185,23 @@ const styles = StyleSheet.create({
       left: 0, 
       right: 0, 
       alignItems: "center" },
-    loadingText: { marginTop: 10, fontSize: 18, color: "#53783e" },
-  resultContainer: { position: "absolute", top: "30%", left: 20, right: 20, backgroundColor: "rgba(0, 0, 0, 0.7)", padding: 20, borderRadius: 10 },
-  resultText: { color: "#fff", fontSize: 16, marginBottom: 10 },
+    loadingText: { 
+      marginTop: 10, 
+      fontSize: 18, 
+      color: "#53783e" 
+    },
+    resultContainer: { 
+      position: "absolute", 
+      top: "30%", 
+      left: 20, 
+      right: 20, 
+      backgroundColor: "rgba(0, 0, 0, 0.7)", 
+      padding: 20, 
+      borderRadius: 10 
+    },
+    resultText: { 
+      color: "#53783e", 
+      fontSize: 25, 
+      marginBottom: 10 
+    },
   });
