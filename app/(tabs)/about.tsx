@@ -1,137 +1,113 @@
 import React from 'react';
-import { StyleSheet, View, Button, SafeAreaView, Text, ScrollView} from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-function AccordionItem({
-  isExpanded,
-  children,
-  viewKey,
-  style,
-  duration = 500,
-}) {
-  const height = useSharedValue(0);
-
-  const derivedHeight = useDerivedValue(() =>
-    withTiming(height.value * Number(isExpanded.value), { duration })
-  );
-  const bodyStyle = useAnimatedStyle(() => ({
-    height: derivedHeight.value,
-  }));
-
+function InfoCard({ title, description, icon }) {
   return (
-    <Animated.View
-      key={`accordionItem_${viewKey}`}
-      style={[styles.animatedView, bodyStyle, style]}
-    >
-      <View
-        onLayout={(e) => {
-          height.value = e.nativeEvent.layout.height;
-        }}
-        style={styles.wrapper}
-      >
-        {children}
+    <View style={styles.card}>
+      <View style={styles.iconContainer}>
+        <Ionicons name={icon} size={30} color="#ffffff" />
       </View>
-    </Animated.View>
-  );
-}
-
-function Item({ text }) {
-  return (
-    <View style={styles.box}>
-      <Text style={styles.text}>{text}</Text>
-    </View>
-  );
-}
-
-function Parent({ open, text }) {
-  return (
-    <View style={styles.parent}>
-      <AccordionItem isExpanded={open} viewKey="Accordion">
-        <Item text={text} />
-      </AccordionItem>
+      <View style={styles.textContainer}>
+        <Text style={styles.cardTitle}>{title}</Text>
+        <Text style={styles.cardText}>{description}</Text>
+      </View>
     </View>
   );
 }
 
 export default function App() {
-  const open1 = useSharedValue(false);
-  const open2 = useSharedValue(false); 
-  const open3 = useSharedValue(false);
-  const open4 = useSharedValue(false);
-
-  const onPress1 = () => {
-    open1.value = !open1.value;
-  };
-  const onPress2 = () => {
-    open2.value = !open2.value;
-  };
-  const onPress3 = () => {
-    open3.value = !open3.value;
-  };
-  const onPress4 = () => {
-    open4.value = !open4.value;
-  };
-
   return (
-    <ScrollView>
-    <SafeAreaView style={styles.container}>
-    <Button onPress={onPress1} title="About App" color={"#7DA24A"}/>
-        <Parent open={open1} text="BinBuddy is an local King County application dedicated to serving your recycling needs!" />
-      <Button onPress={onPress2} title="How to Scan" color={"#7DA24A"}/>
-        <Parent open={open2} text="Identifiable by the barcode icon or navigated through the home page, you can use our in app camera to scan barcodes. By scanning a barcode on any item, BinBuddy will do its best to determine whether the scanned item is recyclable or not."  />
-      <Button onPress={onPress3} title="Developers" color={"#7DA24A"}/>
-      <Parent 
-        open={open3} 
-        text={`Team Lead: Jessica Swoap\n\nAPI Team: Bo Pan and Udita Gupta\n\nDatabase Team: Elissa Ryan and Kyle Wang\n\nApp Development Team: Mathew Tran and Megan Oh`}
-      />
-       </SafeAreaView>
-    </ScrollView>
+    <ImageBackground
+      source={require('../../assets/images/recycle.png')} // Add the path to your background image
+      style={styles.backgroundImage}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.title}>Welcome to BinBuddy</Text>
+
+          <InfoCard
+            title="About BinBuddy"
+            description="BinBuddy is a local King County application dedicated to serving your recycling needs."
+            icon="information-circle-outline"
+          />
+
+          <InfoCard
+            title="How to Scan Items"
+            description="Use our in-app camera to scan barcodes. BinBuddy will determine whether the item is recyclable or not."
+            icon="camera-outline"
+          />
+
+          <InfoCard
+            title="Meet the Developers"
+            description={`Team Lead: Jessica Swoap\nAPI Team: Bo Pan & Udita Gupta\nDatabase: Elissa Ryan & Kyle Wang\nApp Dev: Mathew Tran & Megan Oh`}
+            icon="people-outline"
+          />
+        </SafeAreaView>
+      </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    justifyContent: 'center',
-    paddingTop: 50,
-    margin:0,
+    resizeMode: 'cover',
+    paddingVertical: 20,
   },
-  content: {
-    flex: 2,
-    justifyContent: 'center',
+  scrollContainer: {
+    flexGrow: 1,
     alignItems: 'center',
   },
-  wrapper: {
+  container: {
+    width: '90%',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    textAlign: 'center',
+    marginBottom: 20,
+    fontFamily: 'Arial',
+  },
+  card: {
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
     width: '100%',
-    position: 'absolute',
-    display: 'flex',
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 20,
     alignItems: 'center',
-    
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
+    borderLeftWidth: 5,
+    borderLeftColor: '#7DA24A',
   },
-  animatedView: {
-    width: '100%',
-    overflow: 'hidden',
+  iconContainer: {
+    marginRight: 20,
+    backgroundColor: '#7DA24A',
+    borderRadius: 50,
+    padding: 10,
   },
-  button: {
-  color: '#ceede6',
+  textContainer: {
+    flex: 1,
   },
-  box: {
-    height: 200,
-    width: 300,
-    padding:5,
-    backgroundColor: '#53783e',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign:'center',
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#39424e',
+    marginBottom: 5,
+    fontFamily: 'Arial',
   },
-  text: {
-    color: '#fff', // White text
-    textAlign: 'center', // Center the text
-    fontSize: 16, // Adjust the size if needed
+  cardText: {
+    fontSize: 16,
+    color: '#555',
+    lineHeight: 24,
+    fontFamily: 'Arial',
   },
 });
