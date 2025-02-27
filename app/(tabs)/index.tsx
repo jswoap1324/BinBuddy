@@ -18,7 +18,7 @@ export default function Index() {
 
   return (
     <LinearGradient
-      colors={['#ffffff', '#A9D08E']} 
+      colors={['#A9D08E','#ffffff']} 
       style={styles.container}
     >
       <Image

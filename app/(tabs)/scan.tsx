@@ -64,7 +64,7 @@ export default function App() {
 
   return (
     <LinearGradient
-    colors={['#ffffff', '#A9D08E']} style={styles.container}>
+    colors={['#A9D08E','#ffffff']} style={styles.container}>
       {!scanned && (<>
       <CameraView
         onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
@@ -229,5 +229,6 @@ const styles = StyleSheet.create({
       width: 50, 
       height: 50, 
       marginBottom: 10,
+      tintColor: "#39424e",
     },
   });
