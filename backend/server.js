@@ -21,21 +21,34 @@ app.get("/api/classify/:upc", async (req, res) => {
         }
 
         if (row) {
-            // ✅ If item is found, return disposal method
             console.log("✅ Found item:", row);
             return res.json({ disposalMethod: row.disposalMethod });
         } else {
-            // ❌ If item not found, use GPT-4 to classify disposal method
-            console.log("⚠️ Item not found, predicting with GPT-4...");
+            console.log("⚠️ Item not found, fetching from UPC API...");
 
             try {
+                // 🔹 Step 1: Fetch product details from UPCItemDB
+                const upcResponse = await axios.get(`https://api.upcitemdb.com/prod/trial/lookup?upc=${upc}`);
+                const product = upcResponse.data.items[0];
+
+                if (!product) {
+                    console.log("⚠️ No product found for this UPC.");
+                    return res.status(404).json({ error: "Product not found" });
+                }
+
+                const productName = product.title || "Unknown Item";
+                const productCategory = product.category || "Unknown Category";
+                
+                console.log(`🛒 Product Name: ${productName}, Category: ${productCategory}`);
+
+                // 🔹 Step 2: Use GPT-4 to classify disposal method with product details
                 const aiResponse = await axios.post(
                     "https://api.openai.com/v1/chat/completions",
                     {
-                        model: "gpt-4",
+                        model: "gpt-4-turbo",
                         messages: [
-                            { role: "system", content: "You are an AI that classifies items for disposal." },
-                            { role: "user", content: `Classify the disposal method for this item: "${upc}". Options: Recycle, Compost, Trash, Hazardous. Respond with only one word.` }
+                            { role: "system", content: "You classify items for disposal based on their name and category." },
+                            { role: "user", content: `Classify the disposal method for this item: "${productName}" in category "${productCategory}". Options: Recycle, Compost, Trash, Hazardous. Respond with only one word.` }
                         ],
                         max_tokens: 10,
                         temperature: 0.3
@@ -50,22 +63,22 @@ app.get("/api/classify/:upc", async (req, res) => {
 
                 const predictedDisposal = aiResponse.data.choices[0].message.content.trim();
 
-                // Insert the AI prediction into the database
+                // 🔹 Step 3: Save the classified item in the database
                 db.run(
                     "INSERT INTO ITEM (itemID, name, disposalMethod) VALUES (?, ?, ?)",
-                    [upc, "Unknown Item", predictedDisposal],
+                    [upc, productName, predictedDisposal],
                     (err) => {
                         if (err) {
-                            console.error("❌ Error inserting AI-generated item:", err);
+                            console.error("❌ Error saving AI classification:", err);
                             return res.status(500).json({ error: "Failed to save AI prediction" });
                         }
-                        console.log("✅ AI prediction saved:", predictedDisposal);
+                        console.log("✅ AI classification saved:", predictedDisposal);
                         return res.json({ disposalMethod: predictedDisposal });
                     }
                 );
             } catch (error) {
-                console.error("❌ GPT-4 Prediction Error:", error.response?.data || error.message);
-                return res.status(500).json({ error: "AI prediction failed" });
+                console.error("❌ API or GPT-4 Error:", error.response?.data || error.message);
+                return res.status(500).json({ error: "Error fetching product details or AI prediction" });
             }
         }
     });
