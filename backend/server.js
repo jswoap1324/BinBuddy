@@ -148,8 +148,7 @@ app.get("/api/classify/:upc", async (req, res) => {
                         }
 
                         return res.json({
-                            disposalMethod: predictedDisposal,
-                            warning: warningMessage
+                            disposalMethod: predictedDisposal
                         });
                     }
                 );
