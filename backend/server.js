@@ -11,8 +11,15 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Uses Render's environment 
 app.use(cors());
 app.use(express.json());
 
+
 app.get("/api/classify/:upc", async (req, res) => {
-    const upc = req.params.upc;
+    const upc = req.params.upc.trim();
+
+    // 🔹 Step 1: Validate UPC format (12 or 13 digits)
+    if (!/^\d{12,13}$/.test(upc)) {
+        console.log(`❌ Invalid UPC: ${upc}`);
+        return res.status(400).json({ error: "Invalid UPC format. Must be 12 or 13 digits." });
+    }
 
     db.get("SELECT * FROM ITEM WHERE itemID = ?", [upc], async (err, row) => {
         if (err) {
@@ -21,16 +28,23 @@ app.get("/api/classify/:upc", async (req, res) => {
         }
 
         if (row) {
-            console.log("✅ Found item:", row);
+            console.log("✅ Found item in DB:", row);
             return res.json({ disposalMethod: row.disposalMethod });
         } else {
-            console.log("⚠️ Item not found, fetching from UPC API...");
+            console.log(`⚠️ Item not found in DB, checking UPC API for: ${upc}`);
 
             try {
-                // 🔹 Step 1: Fetch product details from UPCItemDB
-                const upcResponse = await axios.get(`https://api.upcitemdb.com/prod/trial/lookup?upc=${upc}`);
-                console.log("📡 UPC API Response:", upcResponse.data);
-                const product = upcResponse.data.items[0];
+                // 🔹 Step 2: Fetch product details from UPCItemDB
+                const upcResponse = await axios.get(`https://api.upcitemdb.com/prod/trial/lookup?upc=${upc}`, {
+                    headers: {
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                        "Accept": "application/json"
+                    }
+                });
+
+                console.log("📡 UPC API Raw Response:", JSON.stringify(upcResponse.data, null, 2)); // Debugging log
+
+                const product = upcResponse.data.items?.[0];
 
                 if (!product) {
                     console.log("⚠️ No product found for this UPC.");
@@ -39,17 +53,17 @@ app.get("/api/classify/:upc", async (req, res) => {
 
                 const productName = product.title || "Unknown Item";
                 const productCategory = product.category || "Unknown Category";
-                
+
                 console.log(`🛒 Product Name: ${productName}, Category: ${productCategory}`);
 
-                // 🔹 Step 2: Use GPT-4 to classify disposal method with product details
+                // 🔹 Step 3: Use GPT-4 Turbo to classify disposal method with product details
                 const aiResponse = await axios.post(
                     "https://api.openai.com/v1/chat/completions",
                     {
                         model: "gpt-4-turbo",
                         messages: [
                             { role: "system", content: "You classify items for disposal based on their name and category." },
-                            { role: "user", content: `Classify the disposal method for this item: "${productName}" in category "${productCategory}". Options: Recycle, Compost, Trash, Hazardous. Respond with only one word.` }
+                            { role: "user", content: `Classify the disposal method for "${productName}" in category "${productCategory}". Options: Recycle, Compost, Trash, Hazardous. Respond with only one word.` }
                         ],
                         max_tokens: 10,
                         temperature: 0.3
@@ -62,9 +76,11 @@ app.get("/api/classify/:upc", async (req, res) => {
                     }
                 );
 
-                const predictedDisposal = aiResponse.data.choices[0].message.content.trim();
+                const predictedDisposal = aiResponse.data.choices?.[0]?.message?.content?.trim() || "Unknown";
 
-                // 🔹 Step 3: Save the classified item in the database
+                console.log(`🤖 AI Predicted Disposal: ${predictedDisposal}`);
+
+                // 🔹 Step 4: Save the classified item in the database
                 db.run(
                     "INSERT INTO ITEM (itemID, name, disposalMethod) VALUES (?, ?, ?)",
                     [upc, productName, predictedDisposal],
@@ -78,12 +94,13 @@ app.get("/api/classify/:upc", async (req, res) => {
                     }
                 );
             } catch (error) {
-                console.error("❌ API or GPT-4 Error:", error.response?.data || error.message);
-                return res.status(500).json({ error: "Error fetching product details or AI prediction" });
+                console.error("❌ UPC API or GPT-4 Error:", error.response?.data || error.message);
+                return res.status(500).json({ error: "Error fetching product details or AI classification failed" });
             }
         }
     });
-});
+});                
+                        
 
 
 app.listen(PORT, () => {
