@@ -19,6 +19,7 @@ CREATE TABLE ITEM (
 
 -- Insert Data
 INSERT INTO ITEM VALUES
+(635975181951, "The Worst-Case Scenario Card Game", "Recycle"),
 (816645024352, "The Honest Company Hand Sanitizer Spray Coastal Surf, 2 fl oz", "Trash cap and pump, Recycle bottle"),
 (812154035216, "Native Plastic Free Deodorant Aluminum Free Eucalyptus & Mint, 2.65 oz", "Compost"),
 (041507070080, "Thayers Natural Remedies Witch Hazel Alcohol Free Unscented Toner, 12 fl oz", "Recycle"),
