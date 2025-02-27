@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Dimensions, Image, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, Button, Dimensions, Image, ActivityIndicator, TouchableOpacity } from "react-native";
 import { CameraView, Camera } from "expo-camera";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -34,8 +35,7 @@ export default function App() {
         const result = await response.json();
         setBackendResponse(result);
     } catch (error) {
-        console.error("Error fetching data:", error);
-        setBackendResponse({ error: "Failed to fetch data from server" });
+        setBackendResponse('We had an error processing your request\nPlease try again');
     } finally {
         setLoading(false);
     }
@@ -49,8 +49,22 @@ export default function App() {
     return <Text>No access to camera</Text>;
   }
 
+  const getIcon = (disposalMethod) => {
+    switch (disposalMethod) {
+      case "Compost":
+        return require("../../assets/images/compostable.png"); 
+      case "Recycle":
+        return require("../../assets/images/recycleBin.png"); 
+      case "Trash":
+        return require("../../assets/images/trash.png"); 
+      default:
+        return null;
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <LinearGradient
+    colors={['#ffffff', '#A9D08E']} style={styles.container}>
       {!scanned && (<>
       <CameraView
         onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
@@ -81,16 +95,22 @@ export default function App() {
           <Text style={styles.loadingText}>Processing...</Text>
         </View>
       )}
-
-      {scanned && !loading && backendResponse && (
-      <View style={styles.scannedDataContainer}>
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>{JSON.stringify(backendResponse, null, 2)}</Text>
-        </View>
-      <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setBackendResponse(null);}} color={"#7DA24A"} />
+    {scanned && !loading && backendResponse && (
+      <View style={styles.responseContainer}>
+          {backendResponse.disposalMethod && (
+            <Image source={getIcon(backendResponse.disposalMethod)} style={styles.icon} />
+          )}
+      <View style={styles.resultContainer}>
+      <Text style={styles.resultText}>{typeof backendResponse === "string" ? backendResponse : "This item is in the " + backendResponse.disposalMethod + " category."}</Text>
+      </View>
+      <TouchableOpacity onPress={() => { setScanned(false); setBackendResponse(null); }}>
+  <Text style={{ fontSize: 25, color: "#39424e", fontWeight: "bold", textAlign: "center" }}>
+    Tap to Scan Again
+  </Text>
+</TouchableOpacity>
     </View>
       )}
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -158,20 +178,6 @@ const styles = StyleSheet.create({
       textAlign: "center",
       marginBottom: 10,
     },
-    scannedDataContainer: {
-      position: "absolute",
-      top: "40%",
-      left: 0,
-      right: 0,
-      alignItems: "center",
-      padding: 20,
-      borderRadius: 10,
-    },
-    scannedDataText: {
-      color: "#53783e",
-      fontSize: 25,
-      marginBottom: 10,
-    },
     instructionText: {
       position: "absolute",
       top: (height + cutoutHeight) / 2 + 50, 
@@ -196,17 +202,32 @@ const styles = StyleSheet.create({
       color: "#53783e" 
     },
     resultContainer: { 
-      position: "absolute", 
-      top: "30%", 
-      left: 20, 
-      right: 20, 
-      backgroundColor: "rgba(0, 0, 0, 0.7)", 
-      padding: 20, 
-      borderRadius: 10 
+      backgroundColor: "#fff",
+      padding: 20,
+      borderRadius: 10,
+      width: "100%",
+      marginBottom: 20,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 5,
+      elevation: 5,
     },
     resultText: { 
-      color: "#53783e", 
+      color: "#39424e", 
       fontSize: 25, 
-      marginBottom: 10 
+      marginBottom: 10,
+      lineHeight: 40,
+      padding: 10
+    },
+    responseContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      width: "90%",
+    },
+    icon: {
+      width: 50, 
+      height: 50, 
+      marginBottom: 10,
     },
   });
