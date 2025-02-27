@@ -132,7 +132,7 @@ app.get("/api/classify/:upc", async (req, res) => {
 
                 // 🔹 Step 5: Save classified item in the database
                 db.run(
-                    "INSERT INTO ITEM (itemID, name, disposalMethod) VALUES (?, ?, ?)",
+                    "INSERT OR REPLACE INTO ITEM (itemID, name, disposalMethod) VALUES (?, ?, ?)",
                     [upc, productName, predictedDisposal],
                     (err) => {
                         if (err) {
