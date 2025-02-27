@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
       },
   container: {
     flex: 1,
-    backgroundColor:"#53783e",
+    backgroundColor:"#7DA24A",
     //'#e9f0e0'// Light desaturated green
     padding: 20,
     },
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   startButtonText: {
     fontSize: 20,
-    color: '#53783e', // Dark green
+    color: '#7DA24A', // Dark green
     fontWeight: 'bold',
   },
 });

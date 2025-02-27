@@ -43,7 +43,7 @@ const TabBarButton = ({
         })}
         </Animated.View>
        
-        <Animated.Text style={[{color: isFocused ? '#53783e' : 'black', fontSize: 12},animatedTextStyle]}
+        <Animated.Text style={[{color: isFocused ? '#7DA24A' : 'black', fontSize: 12},animatedTextStyle]}
         >
           {label}
         </Animated.Text>

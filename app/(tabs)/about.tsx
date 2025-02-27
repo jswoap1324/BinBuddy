@@ -80,11 +80,11 @@ export default function App() {
   return (
     <ScrollView>
     <SafeAreaView style={styles.container}>
-    <Button onPress={onPress1} title="About App" />
+    <Button onPress={onPress1} title="About App" color={"#7DA24A"}/>
         <Parent open={open1} text="BinBuddy is an local King County application dedicated to serving your recycling needs!" />
-      <Button onPress={onPress2} title="How to Scan" />
+      <Button onPress={onPress2} title="How to Scan" color={"#7DA24A"}/>
         <Parent open={open2} text="Identifiable by the barcode icon or navigated through the home page, you can use our in app camera to scan barcodes. By scanning a barcode on any item, BinBuddy will do its best to determine whether the scanned item is recyclable or not."  />
-      <Button onPress={onPress3} title="Developers" />
+      <Button onPress={onPress3} title="Developers" color={"#7DA24A"}/>
       <Parent 
         open={open3} 
         text={`Team Lead: Jessica Swoap\n\nAPI Team: Bo Pan and Udita Gupta\n\nDatabase Team: Elissa Ryan and Kyle Wang\n\nApp Development Team: Mathew Tran and Megan Oh`}

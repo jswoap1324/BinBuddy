@@ -82,7 +82,7 @@ export default function App() {
           <Text style={styles.resultText}>Processed Data:</Text>
           <Text style={styles.resultText}>{JSON.stringify(backendResponse, null, 2)}</Text>
         </View>
-      <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setBackendResponse(null);}} color={"#53783e"} />
+      <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setBackendResponse(null);}} color={"#7DA24A"} />
     </View>
       )}
     </View>
