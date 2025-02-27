@@ -43,8 +43,10 @@ app.get("/api/classify/:upc", async (req, res) => {
                     console.log("📡 Barcode Lookup API Response:", JSON.stringify(upcResponse.data, null, 2));
 
                     if (upcResponse.data.products && upcResponse.data.products.length > 0) {
-                        productName = upcResponse.data.products[0].title || productName;
-                        productCategory = upcResponse.data.products[0].category || productCategory;
+                        const product = upcResponse.data.products[0];
+
+                        productName = product.title || productName;
+                        productCategory = product.category || product.brand || product.manufacturer || "Unknown Category";
                     } else {
                         console.log("❌ No product found in either API.");
                         return res.status(404).json({ error: "Product not found in any API." });
