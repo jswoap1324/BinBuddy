@@ -85,11 +85,11 @@ export default function App() {
       <Button onPress={onPress2} title="How to Scan" />
         <Parent open={open2} text="Identifiable by the barcode icon or navigated through the home page, you can use our in app camera to scan barcodes. By scanning a barcode on any item, BinBuddy will do its best to determine whether the scanned item is recyclable or not."  />
       <Button onPress={onPress3} title="Developers" />
-        <Parent open={open3} text="Team Lead: Jessica Swoap" />
-        <Parent open={open3} text="API Team: Bo Pan and Udita Gupta" />
-        <Parent open={open3} text="Database Team: Elissa Ryan and Kyle Wang" />
-        <Parent open={open3} text="App Development Team: Mathew Tran and Megan Oh" />
-    </SafeAreaView>
+      <Parent 
+        open={open3} 
+        text={`Team Lead: Jessica Swoap\n\nAPI Team: Bo Pan and Udita Gupta\n\nDatabase Team: Elissa Ryan and Kyle Wang\n\nApp Development Team: Mathew Tran and Megan Oh`}
+      />
+       </SafeAreaView>
     </ScrollView>
   );
 }
