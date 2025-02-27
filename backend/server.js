@@ -10,16 +10,8 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Uses Render's environment 
 
 app.use(cors());
 app.use(express.json());
-
-
 app.get("/api/classify/:upc", async (req, res) => {
     const upc = req.params.upc.trim();
-
-    // 🔹 Step 1: Validate UPC format (12 or 13 digits)
-    if (!/^\d{12,13}$/.test(upc)) {
-        console.log(`❌ Invalid UPC: ${upc}`);
-        return res.status(400).json({ error: "Invalid UPC format. Must be 12 or 13 digits." });
-    }
 
     db.get("SELECT * FROM ITEM WHERE itemID = ?", [upc], async (err, row) => {
         if (err) {
@@ -31,32 +23,25 @@ app.get("/api/classify/:upc", async (req, res) => {
             console.log("✅ Found item in DB:", row);
             return res.json({ disposalMethod: row.disposalMethod });
         } else {
-            console.log(`⚠️ Item not found in DB, checking UPC API for: ${upc}`);
+            console.log(`⚠️ Item not found in DB, checking UPC Database API for: ${upc}`);
 
             try {
-                // 🔹 Step 2: Fetch product details from UPCItemDB
-                const upcResponse = await axios.get(`https://api.upcitemdb.com/prod/trial/lookup?upc=${upc}`, {
-                    headers: {
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-                        "Accept": "application/json"
-                    }
-                });
+                // 🔹 Step 1: Fetch product details from UPC Database API
+                const upcResponse = await axios.get(`https://api.upcdatabase.org/product/${upc}?apikey=${UPC_API_KEY}`);
 
-                console.log("📡 UPC API Raw Response:", JSON.stringify(upcResponse.data, null, 2)); // Debugging log
+                console.log("📡 UPC API Response:", JSON.stringify(upcResponse.data, null, 2)); // Debugging log
 
-                const product = upcResponse.data.items?.[0];
-
-                if (!product) {
+                if (!upcResponse.data.success) {
                     console.log("⚠️ No product found for this UPC.");
-                    return res.status(404).json({ error: "Product not found" });
+                    return res.status(404).json({ error: "Product not found in UPC Database API." });
                 }
 
-                const productName = product.title || "Unknown Item";
-                const productCategory = product.category || "Unknown Category";
+                const productName = upcResponse.data.description || "Unknown Item";
+                const productCategory = upcResponse.data.category || "Unknown Category";
 
                 console.log(`🛒 Product Name: ${productName}, Category: ${productCategory}`);
 
-                // 🔹 Step 3: Use GPT-4 Turbo to classify disposal method with product details
+                // 🔹 Step 2: Use GPT-4 Turbo to classify disposal method
                 const aiResponse = await axios.post(
                     "https://api.openai.com/v1/chat/completions",
                     {
@@ -80,7 +65,7 @@ app.get("/api/classify/:upc", async (req, res) => {
 
                 console.log(`🤖 AI Predicted Disposal: ${predictedDisposal}`);
 
-                // 🔹 Step 4: Save the classified item in the database
+                // 🔹 Step 3: Save classified item in the database
                 db.run(
                     "INSERT INTO ITEM (itemID, name, disposalMethod) VALUES (?, ?, ?)",
                     [upc, productName, predictedDisposal],
@@ -99,7 +84,9 @@ app.get("/api/classify/:upc", async (req, res) => {
             }
         }
     });
-});                
+});
+              
+                         
                         
 
 
