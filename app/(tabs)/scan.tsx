@@ -104,7 +104,7 @@ export default function App() {
       <Text style={styles.resultText}>{typeof backendResponse === "string" ? backendResponse : "This item is in the " + backendResponse.disposalMethod + " category."}</Text>
       </View>
       <TouchableOpacity onPress={() => { setScanned(false); setBackendResponse(null); }}>
-  <Text style={{ fontSize: 25, color: "#39424e", fontWeight: "bold", textAlign: "center" }}>
+  <Text style={{ fontSize: 20, color: "#39424e", fontWeight: "bold", textAlign: "center" }}>
     Tap to Scan Again
   </Text>
 </TouchableOpacity>
@@ -202,16 +202,20 @@ const styles = StyleSheet.create({
       color: "#53783e" 
     },
     resultContainer: { 
-      backgroundColor: "#fff",
+      flexDirection: 'row',
+      backgroundColor: '#ffffff',
+      width: '100%',
       padding: 20,
-      borderRadius: 10,
-      width: "100%",
+      borderRadius: 15,
       marginBottom: 20,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 2 },
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 10 },
       shadowOpacity: 0.2,
-      shadowRadius: 5,
+      shadowRadius: 10,
       elevation: 5,
+      borderLeftWidth: 5,
+      borderLeftColor: '#7DA24A',
     },
     resultText: { 
       color: "#39424e", 
@@ -224,10 +228,11 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       width: "90%",
+      
     },
     icon: {
-      width: 50, 
-      height: 50, 
+      width: 60, 
+      height: 60, 
       marginBottom: 10,
       tintColor: "#39424e",
     },
