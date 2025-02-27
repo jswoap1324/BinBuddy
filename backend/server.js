@@ -49,7 +49,33 @@ app.get("/api/classify/:upc", async (req, res) => {
                         productCategory = product.category || product.brand || product.manufacturer || "Unknown Category";
                     } else {
                         console.log("❌ No product found in either API.");
-                        return res.status(404).json({ error: "Product not found in any API." });
+			console.log("❌ No product found in either API.");
+
+                        // 🔹 Step 3: Ask AI to guess based on UPC format
+                        console.log("🤖 Asking AI to infer the product type...");
+                        const aiGuessResponse = await axios.post(
+                            "https://api.openai.com/v1/chat/completions",
+                            {
+                                model: "gpt-4-turbo",
+                                messages: [
+                                    { role: "system", content: "You classify items based on their UPC number. Try to guess the item type if no product data is available." },
+                                    { role: "user", content: `What type of product might have the UPC number "${upc}"? Respond with the most likely product type or 'Unknown'.` }
+                                ],
+                                max_tokens: 20,
+                                temperature: 0.5
+                            },
+                            {
+                                headers: {
+                                    "Authorization": `Bearer ${OPENAI_API_KEY}`,
+                                    "Content-Type": "application/json"
+                                }
+                            }
+                        );
+
+                        productName = aiGuessResponse.data.choices?.[0]?.message?.content?.trim() || "Unknown Item";
+                        productCategory = "AI Generated Category";
+                        source = "AI Guess";
+                        console.log(`🤖 AI Guessed: ${productName}`);
                     }
                 }
 
