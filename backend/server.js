@@ -8,8 +8,10 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Uses Render's environment variable
 const UPC_API_KEY = "628A708FE693FB5003F3017EE11C872E"; 
+const BARCODE_LOOKUP_API_KEY = "gvo6s6ssbfibwcqasnhjj296nvzll0";
 app.use(cors());
 app.use(express.json());
+
 app.get("/api/classify/:upc", async (req, res) => {
     const upc = req.params.upc.trim();
 
@@ -26,18 +28,28 @@ app.get("/api/classify/:upc", async (req, res) => {
             console.log(`⚠️ Item not found in DB, checking UPC Database API for: ${upc}`);
 
             try {
-                // 🔹 Step 1: Fetch product details from UPC Database API
-                const upcResponse = await axios.get(`https://api.upcdatabase.org/product/${upc}?apikey=${UPC_API_KEY}`);
+                // 🔹 Step 1: Try UPC Database API
+                let upcResponse = await axios.get(`https://api.upcdatabase.org/product/${upc}?apikey=${UPC_API_KEY}`);
+                console.log("📡 UPC Database API Response:", JSON.stringify(upcResponse.data, null, 2));
 
-                console.log("📡 UPC API Response:", JSON.stringify(upcResponse.data, null, 2)); // Debugging log
+                if (upcResponse.data.success) {
+                    productName = upcResponse.data.description || productName;
+                    productCategory = upcResponse.data.category || productCategory;
+                } else {
+                    console.log("⚠️ No product found in UPC Database API, trying Barcode Lookup API...");
 
-                if (!upcResponse.data.success) {
-                    console.log("⚠️ No product found for this UPC.");
-                    return res.status(404).json({ error: "Product not found in UPC Database API." });
+                    // 🔹 Step 2: Try Barcode Lookup API
+                    upcResponse = await axios.get(`https://api.barcodelookup.com/v3/products?barcode=${upc}&key=${BARCODE_LOOKUP_API_KEY}`);
+                    console.log("📡 Barcode Lookup API Response:", JSON.stringify(upcResponse.data, null, 2));
+
+                    if (upcResponse.data.products && upcResponse.data.products.length > 0) {
+                        productName = upcResponse.data.products[0].title || productName;
+                        productCategory = upcResponse.data.products[0].category || productCategory;
+                    } else {
+                        console.log("❌ No product found in either API.");
+                        return res.status(404).json({ error: "Product not found in any API." });
+                    }
                 }
-
-                const productName = upcResponse.data.description || "Unknown Item";
-                const productCategory = upcResponse.data.category || "Unknown Category";
 
                 console.log(`🛒 Product Name: ${productName}, Category: ${productCategory}`);
 
