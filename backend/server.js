@@ -7,7 +7,7 @@ const axios = require("axios");
 const app = express();
 const PORT = process.env.PORT || 5050;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // Uses Render's environment variable
-
+const UPC_API_KEY = "628A708FE693FB5003F3017EE11C872E"; 
 app.use(cors());
 app.use(express.json());
 app.get("/api/classify/:upc", async (req, res) => {
