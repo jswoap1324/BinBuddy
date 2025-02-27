@@ -20,6 +20,7 @@ export default function App() {
   const handleBarcodeScanned = async ({ data }) => {
     setScanned(true);
     setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500)); 
     try {
         const response = await fetch(`https://binbuddy-36i3.onrender.com/api/classify/${data}`, {
             method: "GET",
@@ -84,7 +85,6 @@ export default function App() {
       {scanned && !loading && backendResponse && (
       <View style={styles.scannedDataContainer}>
         <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>Processed Data:</Text>
           <Text style={styles.resultText}>{JSON.stringify(backendResponse, null, 2)}</Text>
         </View>
       <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setBackendResponse(null);}} color={"#7DA24A"} />
