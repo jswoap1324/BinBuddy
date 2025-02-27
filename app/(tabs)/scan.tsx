@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Dimensions, Image, ActivityIndicator, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Dimensions, Image, ActivityIndicator, TouchableOpacity } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import { LinearGradient } from "expo-linear-gradient";
 

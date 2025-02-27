@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, SafeAreaView, Text, ScrollView, ImageBackground, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 function InfoCard({ title, description, icon }) {
@@ -17,42 +17,60 @@ function InfoCard({ title, description, icon }) {
 }
 
 export default function App() {
+  const [fadeAnim] = useState(new Animated.Value(0)); 
+
+  useEffect(() => {
+  
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000, 
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
   return (
-    <ImageBackground
-      source={require('../../assets/images/recycle.png')} 
-      style={styles.backgroundImage}
+    <Animated.View
+      style={[styles.backgroundContainer, { opacity: fadeAnim }]} 
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Welcome to BinBuddy</Text>
+      <ImageBackground
+        source={require('../../assets/images/recycle.png')} 
+        style={styles.backgroundImage}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <SafeAreaView style={styles.container}>
+            <Text style={styles.title}>Welcome to BinBuddy</Text>
 
-          <InfoCard
-            title="About BinBuddy"
-            description="BinBuddy is a local King County application dedicated to serving your recycling needs."
-            icon="information-circle-outline"
-          />
+            <InfoCard
+              title="About BinBuddy"
+              description="BinBuddy is a local King County application dedicated to serving your recycling needs."
+              icon="information-circle-outline"
+            />
 
-          <InfoCard
-            title="How to Scan Items"
-            description="Use our in-app camera to scan barcodes. BinBuddy will determine whether the item is recyclable or not."
-            icon="camera-outline"
-          />
+            <InfoCard
+              title="How to Scan Items"
+              description="Use our in-app camera to scan barcodes. BinBuddy will determine whether the item is recyclable or not."
+              icon="camera-outline"
+            />
 
-          <InfoCard
-            title="Meet the Developers"
-            description={`Team Lead: Jessica Swoap\nAPI Team: Bo Pan & Udita Gupta\nDatabase: Elissa Ryan & Kyle Wang\nApp Dev: Anh Tran & Megan Oh`}
-            icon="people-outline"
-          />
-        </SafeAreaView>
-      </ScrollView>
-    </ImageBackground>
+            <InfoCard
+              title="Meet the Developers"
+              description={`Team Lead: Jessica Swoap\nAPI Team: Bo Pan & Udita Gupta\nDatabase: Elissa Ryan & Kyle Wang\nApp Dev: Anh Tran & Megan Oh`}
+              icon="people-outline"
+            />
+          </SafeAreaView>
+        </ScrollView>
+      </ImageBackground>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  backgroundImage: {
+  backgroundContainer: {
     flex: 1,
     resizeMode: 'cover',
+  },
+  backgroundImage: {
+    flex: 1,
     paddingVertical: 20,
   },
   scrollContainer: {
@@ -92,7 +110,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     backgroundColor: '#7DA24A',
     borderRadius: 50,
-    padding: 10,
+    padding: 12,
   },
   textContainer: {
     flex: 1,
