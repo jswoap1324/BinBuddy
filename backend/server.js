@@ -29,6 +29,7 @@ app.get("/api/classify/:upc", async (req, res) => {
             try {
                 // 🔹 Step 1: Fetch product details from UPCItemDB
                 const upcResponse = await axios.get(`https://api.upcitemdb.com/prod/trial/lookup?upc=${upc}`);
+                console.log("📡 UPC API Response:", upcResponse.data);
                 const product = upcResponse.data.items[0];
 
                 if (!product) {
