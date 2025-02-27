@@ -21,20 +21,25 @@ export default function App() {
     setScanned(true);
     setLoading(true);
     try {
-      const response = await fetch("https://your-backend-api.com/process-barcode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ barcode: data }),
-      });
+        const response = await fetch(`https://binbuddy-36i3.onrender.com/api/classify/${data}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        });
 
-      const result = await response.json();
-      setBackendResponse(result);
+        if (!response.ok) {
+            throw new Error("Failed to fetch data from server");
+        }
+
+        const result = await response.json();
+        setBackendResponse(result);
     } catch (error) {
-      setBackendResponse({ error: "Failed to fetch data from server" });
+        console.error("Error fetching data:", error);
+        setBackendResponse({ error: "Failed to fetch data from server" });
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
