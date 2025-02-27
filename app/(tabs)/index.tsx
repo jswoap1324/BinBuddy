@@ -92,22 +92,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     paddingHorizontal: 20,
+    paddingTop: 100,
   },
   logo: {
     width: 250,
     height: 250,
     resizeMode: 'contain',
+    marginBottom: 20,
   },
   subtitle: {
     fontSize: 18,
     color: "#39424e",
     textAlign: "center",
     fontFamily: "OpenSans", 
+    marginBottom: 20,
   },
   funFactContainer: {
     marginTop: 20,
+    marginBottom: 20,
     backgroundColor: "#E6F4D8",
     padding: 15,
     borderRadius: 10,
