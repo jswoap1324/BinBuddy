@@ -25,8 +25,7 @@ app.get("/api/classify/:upc", async (req, res) => {
         if (row) {
             console.log("✅ Found item in DB:", row);
             return res.json({
-                disposalMethod: row.disposalMethod,
-                source: "Database"
+                disposalMethod: row.disposalMethod
             });
         } else {
             console.log(`⚠️ Item not found in DB, checking UPC APIs for: ${upc}`);
