@@ -35,7 +35,7 @@ export default function App() {
         const result = await response.json();
         setBackendResponse(result);
     } catch (error) {
-        setBackendResponse('We had an error processing your request\nPlease try again');
+        setBackendResponse('We had an error processing your request. Please try again!');
     } finally {
         setLoading(false);
     }
@@ -69,7 +69,7 @@ export default function App() {
       <CameraView
         onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
         barcodeScannerSettings={{
-          barcodeTypes: ["upc_a", "ean13", "itf14", "code93", "code39", "code128"],
+          barcodeTypes: ["aztec","ean13","ean8","upc_a","upc_e", "itf14", "code93", "code39", "code128","codabar","pdf417"],
         }}
         style={StyleSheet.absoluteFillObject}
       />
@@ -102,6 +102,11 @@ export default function App() {
           )}
       <View style={styles.resultContainer}>
       <Text style={styles.resultText}>{typeof backendResponse === "string" ? backendResponse : "This item is in the " + backendResponse.disposalMethod + " category."}</Text>
+      {backendResponse !== "We had an error processing your request. Please try again!" && (
+        <Text style={styles.disclamerText}>
+          This may not be accurate, check with your county guidelines
+        </Text>
+      )}
       </View>
       <TouchableOpacity onPress={() => { setScanned(false); setBackendResponse(null); }}>
   <Text style={{ fontSize: 20, color: "#39424e", fontWeight: "bold", textAlign: "center" }}>
@@ -202,7 +207,7 @@ const styles = StyleSheet.create({
       color: "#53783e" 
     },
     resultContainer: { 
-      flexDirection: 'row',
+      flexDirection: 'column',
       backgroundColor: '#ffffff',
       width: '100%',
       padding: 20,
@@ -222,7 +227,12 @@ const styles = StyleSheet.create({
       fontSize: 25, 
       marginBottom: 10,
       lineHeight: 40,
-      padding: 10
+      padding: 10,
+      textAlign: "center",
+    },
+    disclamerText: {
+      textAlign: "center",
+      fontSize:11,
     },
     responseContainer: {
       alignItems: "center",
