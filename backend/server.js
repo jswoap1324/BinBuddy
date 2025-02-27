@@ -32,12 +32,12 @@ app.get("/api/classify/:upc", async (req, res) => {
                 const aiResponse = await axios.post(
                     "https://api.openai.com/v1/chat/completions",
                     {
-                        model: "gpt-4-turbo",
+                        model: "gpt-4",
                         messages: [
                             { role: "system", content: "You are an AI that classifies items for disposal." },
                             { role: "user", content: `Classify the disposal method for this item: "${upc}". Options: Recycle, Compost, Trash, Hazardous. Respond with only one word.` }
                         ],
-                        max_tokens: 5,
+                        max_tokens: 10,
                         temperature: 0.3
                     },
                     {
