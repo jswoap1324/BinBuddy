@@ -19,7 +19,7 @@ function InfoCard({ title, description, icon }) {
 export default function App() {
   return (
     <ImageBackground
-      source={require('../../assets/images/recycle.png')} // Add the path to your background image
+      source={require('../../assets/images/recycle.png')} 
       style={styles.backgroundImage}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>

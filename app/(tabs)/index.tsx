@@ -72,9 +72,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#fff",
     textAlign: "center",
-    fontWeight: "bold",
-    // textTransform: "uppercase",
     letterSpacing: 1.2,
-    fontFamily: "OpenSans-Bold",
   },
 });
