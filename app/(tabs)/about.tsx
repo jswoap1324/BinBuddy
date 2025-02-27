@@ -40,7 +40,7 @@ export default function App() {
 
           <InfoCard
             title="Meet the Developers"
-            description={`Team Lead: Jessica Swoap\nAPI Team: Bo Pan & Udita Gupta\nDatabase: Elissa Ryan & Kyle Wang\nApp Dev: Mathew Tran & Megan Oh`}
+            description={`Team Lead: Jessica Swoap\nAPI Team: Bo Pan & Udita Gupta\nDatabase: Elissa Ryan & Kyle Wang\nApp Dev: Anh Tran & Megan Oh`}
             icon="people-outline"
           />
         </SafeAreaView>
