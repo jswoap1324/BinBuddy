@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Dimensions, Image } from "react-native";
+import { Text, View, StyleSheet, Button, Dimensions, Image, ActivityIndicator } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [scannedData, setScannedData] = useState(null);
+  const [backendResponse, setBackendResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getCameraPermissions = async () => {
@@ -16,9 +17,23 @@ export default function App() {
     getCameraPermissions();
   }, []);
 
-  const handleBarcodeScanned = ({ type, data }) => {
+  const handleBarcodeScanned = async ({ data }) => {
     setScanned(true);
-    setScannedData({ type, data });
+    setLoading(true);
+    try {
+      const response = await fetch("https://your-backend-api.com/process-barcode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ barcode: data }),
+      });
+
+      const result = await response.json();
+      setBackendResponse(result);
+    } catch (error) {
+      setBackendResponse({ error: "Failed to fetch data from server" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (hasPermission === null) {
@@ -31,7 +46,6 @@ export default function App() {
   return (
     <View style={styles.container}>
       {!scanned && (<>
-    
       <CameraView
         onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
         barcodeScannerSettings={{
@@ -45,7 +59,6 @@ export default function App() {
           style={styles.barcodeIcon} />
         <View style={styles.middleContainer}>
           <View style={styles.sideOverlay} />
-
           <View style={styles.cutout}/>
           <View style={styles.sideOverlay} />
         </View>
@@ -56,15 +69,20 @@ export default function App() {
       </View>
      </>
       )}
-      {scanned && (
+    {scanned && loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#53783e" />
+          <Text style={styles.loadingText}>Processing...</Text>
+        </View>
+      )}
+
+      {scanned && !loading && backendResponse && (
       <View style={styles.scannedDataContainer}>
-      <Text style={styles.scannedDataText}>
-        Barcode Type: {scannedData.type}
-      </Text>
-      <Text style={styles.scannedDataText}>
-        Barcode Data: {scannedData.data}
-      </Text>
-      <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setScannedData(null);}} color={"#53783e"} />
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>Processed Data:</Text>
+          <Text style={styles.resultText}>{JSON.stringify(backendResponse, null, 2)}</Text>
+        </View>
+      <Button title={"Tap to Scan Again"} onPress={() => {setScanned(false); setBackendResponse(null);}} color={"#53783e"} />
     </View>
       )}
     </View>
@@ -142,7 +160,6 @@ const styles = StyleSheet.create({
       left: 0,
       right: 0,
       alignItems: "center",
-      // backgroundColor: "rgba(0, 0, 0, 0.5)",
       padding: 20,
       borderRadius: 10,
     },
@@ -162,5 +179,14 @@ const styles = StyleSheet.create({
       paddingVertical: 10, 
       paddingHorizontal: 60,
       zIndex: 10,
-    }
+    },
+    loadingContainer: { 
+      position: "absolute", 
+      top: "40%", 
+      left: 0, 
+      right: 0, 
+      alignItems: "center" },
+    loadingText: { marginTop: 10, fontSize: 18, color: "#53783e" },
+  resultContainer: { position: "absolute", top: "30%", left: 20, right: 20, backgroundColor: "rgba(0, 0, 0, 0.7)", padding: 20, borderRadius: 10 },
+  resultText: { color: "#fff", fontSize: 16, marginBottom: 10 },
   });
