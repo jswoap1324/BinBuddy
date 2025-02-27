@@ -34,10 +34,9 @@ app.get("/api/classify/:upc", async (req, res) => {
             let productName = "Unknown Item";
             let productCategory = "Unknown Category";
             let source = "Unknown";
+            let foundProduct = false;
 
             try {
-                let foundProduct = false;
-
                 // 🔹 Step 1: Try UPC Database API
                 try {
                     const upcResponse = await axios.get(`https://api.upcdatabase.org/product/${upc}?apikey=${UPC_API_KEY}`);
@@ -57,15 +56,21 @@ app.get("/api/classify/:upc", async (req, res) => {
                 if (!foundProduct) {
                     try {
                         const lookupResponse = await axios.get(`https://api.barcodelookup.com/v3/products?barcode=${upc}&key=${BARCODE_LOOKUP_API_KEY}`);
-                        console.log("📡 Barcode Lookup API Response:", JSON.stringify(lookupResponse.data, null, 2));
+                        console.log("📡 RAW Barcode Lookup API Response:", JSON.stringify(lookupResponse.data, null, 2));
 
                         if (lookupResponse.data.products && lookupResponse.data.products.length > 0) {
                             const product = lookupResponse.data.products[0];
+                            console.log("✅ Product Found in Barcode Lookup API:", JSON.stringify(product, null, 2));
 
-                            productName = product.title || productName;
-                            productCategory = product.category || product.brand || product.manufacturer || "Unknown Category";
+                            productName = product.title && product.title.trim() ? product.title.trim() : productName;
+                            productCategory = product.category && product.category.trim() 
+                                ? product.category.trim() 
+                                : (product.brand || product.manufacturer || "Unknown Category");
+
                             source = "Barcode Lookup API";
                             foundProduct = true;
+                        } else {
+                            console.log("⚠️ No valid product found in Barcode Lookup API.");
                         }
                     } catch (error) {
                         console.log("⚠️ No product found in Barcode Lookup API.");
@@ -161,4 +166,5 @@ app.listen(PORT, () => {
     console.log(`✅ Connected to SQLite database`);
     console.log(`🚀 Server running on https://binbuddy-36i3.onrender.com`);
 });
+
 
